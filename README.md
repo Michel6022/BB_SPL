@@ -35,9 +35,4 @@ The simulation models five infeed stations, each feeding into either a red or bl
 - [Salabim](https://salabim.org/) library
 - Optional: [Matplotlib](https://matplotlib.org/) (if you plan to visualize queue times)
 
-## Installation
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/username/baggage-handling-simulation.git
-   cd baggage-handling-simulation
