@@ -56,6 +56,8 @@ The script prints route statistics after simulation, showing:
 ### Usage
 
 1. Clone this repository.
-2. Install dependencies:
+2. Use Python 3.12.7
+3. Use Salabim 24.0.15
+4. Install dependencies:
    ```bash
    pip install salabim
