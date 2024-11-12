@@ -1,38 +1,61 @@
-# Baggage Handling Simulation
+# Baggage Flow Simulation
 
-This project simulates a baggage handling system, focusing on routing baggage items through intermediate queues and a backbone system (carousel). The simulation is built using [Salabim](https://salabim.org/), a discrete-event simulation library in Python. It includes infeed stations, intermediate queues, backbone resources, and sinks to model the flow of baggage in an airport setting.
+This project simulates baggage flow within an airport baggage handling system using Salabim. The simulation tracks baggage moving from infeed stations, through intermediate queues and backbones (blue and red), to various sink destinations, allowing analysis of route performance and load balancing.
 
-## Table of Contents
+## Key Components
 
-1. [Overview](#overview)
-2. [Features](#features)
-3. [Requirements](#requirements)
-4. [Installation](#installation)
-5. [Usage](#usage)
-6. [Code Structure](#code-structure)
-7. [Customization](#customization)
+- **Environment**: The Salabim environment controls the timing and animation of the simulation.
+- **Baggage**: Each baggage item has properties such as assigned sink, backbone color, and infeed ID, representing different routes through the system.
+- **DirectionGenerator**: Generates baggage items at defined intervals, assigning each item a route through a backbone color and infeed station.
+- **InfeedStation**: Sets up direction generators at each infeed station, assigning baggage items to routes based on a lookup table.
+- **Resources and Queues**: Simulates different sections of the baggage system, such as the blue and red backbone loops, E/F buffers, and link resources connecting sections.
 
----
+## Simulation Details
 
-## Overview
+### Classes and Functions
 
-The simulation models five infeed stations, each feeding into either a red or blue backbone resource (carousel) based on baggage assignment. Each infeed station directs baggage to specific intermediate queues, which may differ by direction (blue or red backbone). In particular, the West infeed station uses a unique queue, `"Queue West"`, where baggage is held for a set time before moving to an intermediate blue queue.
+1. **Baggage**: Represents individual baggage items. The `process` method simulates routing the baggage item through queues and resources, updating statistics on route counts and times.
+   - **Routes**:
+     - `_route_zuid`, `_route_west`, `_route_t2`, `_route_e_hall`, `_route_d_hall`: Define paths for each baggage item based on infeed station and sink destination.
+   - **Route Statistics**: Collects stats for each infeed-to-sink route and prints them at the end of the simulation.
 
-### Key Components
-- **Baggage**: Represents each item of luggage and determines its assigned queue and backbone.
-- **InfeedStation**: Generates baggage items and directs them to the appropriate intermediate queue.
-- **Queues and Resources**: Includes both blue and red backbone resources, as well as sinks where baggage completes its journey.
+2. **DirectionGenerator**: Generates baggage items at specified intervals and assigns each item a route with a random backbone color.
 
-## Features
+3. **InfeedStation**: Initializes DirectionGenerators, linking each infeed to specific intervals based on the `interval_lookup` table, which maps each (infeed, sink) combination to an interval.
 
-- **Backbone Routing**: Simulates the choice between red and blue backbones for load balancing.
-- **Queue Waiting Time**: Tracks and displays the average waiting time in each queue.
-- **Animation**: Visualizes the movement of baggage through queues and backbones using Salabim's animation feature.
+### Resources and Queues
 
-## Requirements
+- **Backbone Resources and Queues**: Separate resources and queues represent the blue and red backbones.
+- **Buffers and Links**: Intermediate resources simulate buffers and links between different stations.
+- **Infeed Queues**: Each infeed station has a designated queue, along with intermediate blue and red queues.
 
-- Python 3.7 or later
-- [Salabim](https://salabim.org/) library
-- Optional: [Matplotlib](https://matplotlib.org/) (if you plan to visualize queue times)
+### Route and Load Balancing
 
+Each infeed ID follows a specific route and backbone color, with statistics collected for each infeed-to-sink combination. These stats help analyze load balancing across routes.
 
+### Animation
+
+The simulation animates the movement of baggage items between stations. Positions and labels are provided for visual tracking of the infeed stations, sinks, and intermediate queues.
+
+### Running the Simulation
+
+- Run the simulation with `env.run(duration)`, where `duration` (e.g., 50) is the simulation time.
+- Enable animations with `env.animate(True)` if using Salabim’s visual mode.
+- **Note**: Adjust the `interval_lookup` dictionary to set different intervals for each infeed-sink route if needed.
+
+### Output
+
+The script prints route statistics after simulation, showing:
+- **Count**: Number of baggage items processed for each route.
+- **Average Time**: Average time taken by baggage items for each route.
+
+### Requirements
+
+- Python with Salabim library installed.
+
+### Usage
+
+1. Clone this repository.
+2. Install dependencies:
+   ```bash
+   pip install salabim
